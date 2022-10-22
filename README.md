@@ -1,6 +1,6 @@
 - 👋 Hi, I’m @Burh2k
 - 👀 I’m interested in Coding and Multiplayer Games
-- 🌱 I’m currently learning Front End Web Development
+- 🌱 I’m an Aspiring Front End Web Development
 - 💞️ I’m looking to collaborate on Javascript
 - 📫 You can reach me at burhan.ahmed60090@gmail.com 
 
