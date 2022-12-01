@@ -20,7 +20,6 @@ public:
   float t;
 private:
   GLuint texID;
-
 public:
   // constructor
   Renderer() : t(0.0), texID(0) {}
@@ -36,7 +35,10 @@ public:
     std::string fileName("dice_texture.ppm");
     texID = loadTexture(fileName);
   }
-
+	float get_t()
+	{
+		return t;
+	}
   void resize(int w, int h) {
     glViewport(0, 0, w, h);
     glMatrixMode(GL_PROJECTION);
@@ -52,11 +54,11 @@ public:
     glLoadIdentity();
     // set camera
     gluLookAt(8.0, -2.0, 5.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+    
     // draw scene
-    glRotatef(t, 0.0f, 0.0f, 1.0f);
+    glRotatef(t, 1.0f, 0.0f, 1.0f);
     drawTexturedCube();
   }
-
 private:
   // returns a valid textureID on success, otherwise 0
   GLuint loadTexture(std::string &filename) {
@@ -104,6 +106,7 @@ private:
     glTexCoord2f(0.25f,0.25f); glVertex3f(-1.0f,-1.0f, 1.0f);
     glTexCoord2f(0.50f,0.25f); glVertex3f( 1.0f,-1.0f, 1.0f);
     glTexCoord2f(0.50f,0.50f); glVertex3f( 1.0f, 1.0f, 1.0f);
+    //glTexCoord2f(0.75f,0.75f); glVertex3f( 1.0f, 1.0f, 1.0f);
     glEnd();
     glColor3f(1.0f,1.0f,0.0f);
     glBegin(GL_POLYGON); // five
@@ -200,7 +203,6 @@ private:
           targetIndex++;
       }
     }
-
     return true;
   }
 };
@@ -220,33 +222,52 @@ static void glutDisplay()
   glutSwapBuffers();
   glutReportErrors();
 }
-
 static void timer(int v) 
 {
-  float offset = 1.0f;
+  float offset = 9.5f;
   renderer->t += offset;
   glutDisplay();
   glutTimerFunc(unsigned(20), timer, ++v);
 }
 
+void MyMouse(int button, int state, int x, int y)
+{	
+switch (button)
+{
+   case GLUT_LEFT_BUTTON:
+   if( state==GLUT_UP){	
+   	printf("It should work");
+   	exit(0);
+   //	glLoadIdentity(); 
+	//x = 0.0f;
+	//rotatef(x, 1.0f, 0.0f, 0.0f);
+    //glRotatef(x, 1.0f, 0.0f, 0.0f);
+       
+}
+    	break;
+	default:
+		printf(" DEFAULT work");
+   }
+}
 
 int main(int argc, char **argv) 
 {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
-  glutInitWindowPosition(100,100);
-  glutInitWindowSize(320, 320);
+  glutInitWindowPosition(700,300);
+  glutInitWindowSize(400, 400);
 
-  glutCreateWindow("Texture Demo");
-
+  glutCreateWindow("Game Dice");
   glutDisplayFunc(glutDisplay);
-  //glutIdleFunc(glutDisplay);
+  glutIdleFunc(glutDisplay);
   glutReshapeFunc(glutResize);
-
+	glutMouseFunc(MyMouse);
   renderer = new Renderer;
   renderer->init();
 
   glutTimerFunc(unsigned(20), timer, 0);
-
+  
+  
+  	
   glutMainLoop();
 }
