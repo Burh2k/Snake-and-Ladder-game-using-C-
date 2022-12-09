@@ -9,7 +9,6 @@
 #include<string>
 
 using namespace std;
-//board();
 
 int roll() {
   int num;
@@ -18,22 +17,71 @@ int roll() {
 }
 char player1[100];
 char player2[100];
-class Node {
-  public: string data;
-  Node * prenode;
-  Node * next;
-  Node() {
+
+template <typename T> class Node
+{
+	public:
+    T data; //the object information
+    Node<T>* next; //pointer to the next node element
+  	Node<T>* prenode;
+  	Node() {
     this -> data = data;
     prenode = NULL;
     next = NULL;
   }
 };
+
+class stack
+{
+public:
+Node<int> *top;
+stack()
+{
+top = NULL;
+}
+int gettop()
+{
+return top->data;
+}
+void push(int num)
+{
+Node<int> *temp = new Node<int>;
+temp->data=num;
+temp->next=NULL;
+if(top==NULL)
+{
+top = temp;
+}
+else
+{
+temp->next=top;
+top = temp;
+}
+}
+void display() {
+Node<int> *temp=NULL;
+temp = top;
+while(temp!=NULL)
+{
+cout << temp->data << endl;
+temp = temp->next;
+}
+}
+void pop() {
+Node<int> *temp=top;
+top=top->next;
+delete temp;
+}
+};
+
 class Turns {
-  public: Node * head;
-  Node * tail;
-  Node * current;
-          bool x, y;
-          int p1,p2;
+  public: 
+  Node<string>* head;
+  Node<string>* tail;
+  Node<string>* current;
+  stack st1;
+	bool x, y;
+	int p1,p2;
   Turns() {
     head = NULL;
     tail = NULL;
@@ -46,14 +94,14 @@ class Turns {
   string getcurrent() {
     return current -> data;
   }
-  void setcurrent(Node * index) {
+  void setcurrent(Node<string>* index) {
     current = index;
   }
-  void sethead(Node * Head) {
+  void sethead(Node<string>* Head) {
     head = Head;
   }
   void add(string num) {
-    Node * temp = new Node;
+    Node<string>* temp = new Node<string>;
     temp -> data = num;
     temp -> next = NULL;
     if (head == NULL) {
@@ -92,14 +140,11 @@ class Turns {
       player1[i] = ' ';
       player2[i] = ' ';
     }
-
     //	board(); //display board
     char n; //cin from user for dice roll
     int r; //number from dice
     int c;
 
-
-	
     //	int p2=0; 
     //		while(p1 != 100 || p2!= 100){
     player1[p1] = ' ';
@@ -117,64 +162,98 @@ class Turns {
       else {
         r = roll();
         if (x==true) {
-
-          p1 = p1 + r; //update the position by adding new number generated from dice
+        st1.push(r);
+          p1 = p1 + st1.gettop(); //update the position by adding new number generated from dice
           if (p1 > 100) {
-            p1 = p1 - r; //remove the dice number from position and keep it at present
+            p1=p1- st1.gettop();
+            st1.pop();
+//          	st1.pop();
+//            p1 = p1 - r; //remove the dice number from position and keep it at present
           }
-          cout << "Player1 (Burhan) got " << r << endl;
+          cout << "Player 1 "<<getcurrent()<<" got " << st1.gettop() << endl;
           if (r == 6) { //if dice give 6 then re-roll
             r = roll();
-            p1 = p1 + r;
+            st1.push(r);
+            p1 = p1 + st1.gettop();
             if (p1 > 100) {
-              p1 = p1 - r;
+            p1=p1- st1.gettop();
+            st1.pop();
+//            	st1.pop();
+//            	p1 = p1 - r;
             }
-            cout << "Player1 (Burhan) got " << r << " at 2nd turn" << endl;
+            cout << "Player 1 "<<getcurrent()<<" got " << st1.gettop() << " at 2nd turn" << endl;
             if (r == 6) {
-              r = roll(); //roll for the third time
-              p1 = p1 + r;
+            r = roll(); //roll for the third time
+            st1.push(r);
+            p1 = p1 + st1.gettop();
               if (p1 > 100 && r != 6) {
-                p1 = p1 - r;
+                p1=p1- st1.gettop();
+              	st1.pop();
+//              	st1.pop();
+//                p1 = p1 - r;
               }
               if (r == 6) { //if 6 again, he stay where he is
-                p1 = 6 - 6 - 6;
+              p1=p1- st1.gettop();
+              st1.pop();
+			  p1=p1- st1.gettop();
+              st1.pop();
+			  p1=p1- st1.gettop();
+              st1.pop();
+              
+               // p1 = 6 - 6 - 6;
                 cout << "Three consecutive 6's which is 0" << endl;
               } else
-                cout << "Player1 (Burhan) got " << r << " at 3rd turn" << endl;
+                cout << "Player 1 "<<getcurrent()<<" got " << r << " at 3rd turn" << endl;
             }
           }
         }
 		 else {
-          p2 = p2 + r; //update the position by adding new number generated from dice
+		 st1.push(r);
+          p2 = p2 + st1.gettop(); //update the position by adding new number generated from dice
           if (p2 > 100) {
-            p2 = p2 - r; //remove the dice number from position and keep it at present
+          	p2=p2- st1.gettop();
+            st1.pop();
+           // p2 = p2 - r; //remove the dice number from position and keep it at present
           }
-          cout << "Player 2  got " << r << endl;
+          cout << "Player 2 "<<getcurrent()<<" got " << r << endl;
           if (r == 6) { //if dice give 6 then re-roll
             r = roll();
-            p2 = p2 + r;
+            st1.push(r);
+            p2 = p2 + st1.gettop();
             if (p2 > 100) {
-              p2 = p2 - r;
+            p2=p2  - st1.gettop();
+            st1.pop();
+            //  p2 = p2 - r;
             }
-            cout << "Player 2  got " << r << " at 2nd turn" << endl;
+            cout << "Player 2 "<<getcurrent()<<" got " << r << " at 2nd turn" << endl;
             if (r == 6) {
               r = roll(); //roll for the third time
-              p2 = p2 + r;
+            st1.push(r);
+              p2 = p2 + st1.gettop();
               if (p2 > 100 && r != 6) {
-                p2 = p2 - r;
+              	p2=p2- st1.gettop();
+              	st1.pop();
+               // p2 = p2 - r;
               }
               if (r == 6) { //if 6 again, he stay where he is
-                p2 = 6 - 6 - 6;
+            	p2=p2- st1.gettop();
+              	st1.pop();
+			  	p2=p2- st1.gettop();
+              	st1.pop();
+			  	p2=p2- st1.gettop();
+              	st1.pop();
+				//p2 = 6 - 6 - 6;
                 cout << "Three consecutive 6's which is 0" << endl;
               } else
-                cout << "Player 2 got " << r << " at 3rd turn" << endl;
+                cout << "Player 2 "<<getcurrent()<<" got " << r << " at 3rd turn" << endl;
             }
           }
         }
       }
     }
-    player1[p1] = 'B';
-    player2[p2] = 'S';
+    
+    player1[p1] = 'A';
+    player2[p2] = 'B';
 
 	if (x == true && y==false) {
       y = true;
@@ -183,27 +262,14 @@ class Turns {
       x = true;
       y=false;
     }
-    //}
-    //		cout << "Press r to roll dice Player 2  : ";
-    //		cin >> n;
-    //		system("CLS");
-    if (getcurrent() == "Burhan") {
- 
       if (p1 == 100) {
-        cout << "Player 1(Burhan) Has Won!!!";
+        cout << "Player 1 " <<getcurrent()<<" has Won!!!";
         exit(0);
       }
-    } else {
-
       if (p2 == 100) {
-        cout << "Player 2(Arbab) Has Won!!!";
+        cout << "Player 2 " <<getcurrent()<<" has Won!!!";
         exit(0);
       }
-    }
-    //	board();
-
-    //	}
-
   }
 
 };
@@ -254,7 +320,6 @@ int main() {
   l1.display();
   char x; //input to continue the loop
   while (true) {
-
     l1.move();
     l1.forward();
     board();
