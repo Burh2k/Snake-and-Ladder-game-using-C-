@@ -10,11 +10,83 @@
 
 using namespace std;
 
-int roll() {
-  int num;
-  num = rand() % (6) + 1;
-  return num;
+class Dice {
+private:
+	int number;
+public:
+	Dice() {
+		number = 1;
+		srand(time(0));
+	}
+	int roll() {
+		number = rand() % 6 + 1;
+		return number;
+	}
+	int get_number() {
+		return number;
+	}
+	void set_number(int n) {
+		number = n;
+	}
+int display(int a)
+{
+//	PlaySound(TEXT("ladder"),NULL, SND_FILENAME);
+if(a==1)
+{
+cout << " ----- " << endl;
+cout << "|     |" << endl;
+cout << "|  O  |" << endl;
+cout << "|     |" << endl;
+cout <<  " -----" << endl;
 }
+else if(a==2)
+{
+cout << " -----" << endl;
+cout << "|    O|" << endl;
+cout << "|     |" << endl;
+cout << "|O    |" << endl;
+cout <<  " -----" << endl;
+}
+else if(a==3)
+{
+cout << " -----" << endl;
+cout << "|    O|" << endl;
+cout << "|  O  |" << endl;
+cout << "|O    |" << endl;
+cout <<  " -----" << endl;
+}
+else if(a==4)
+{
+cout << " -----" << endl;
+cout << "|O   O|" << endl;
+cout << "|     |" << endl;
+cout << "|O   O|" << endl;
+cout <<  " -----" << endl;
+}
+else if(a==5)
+{
+cout << " -----" << endl;
+cout << "|O   O|" << endl;
+cout << "|  O  |" << endl;
+cout << "|O   O|" << endl;
+cout <<  " -----" << endl;
+}
+else if(a==6)
+{
+cout << " -----" << endl;
+cout << "|O   O|" << endl;
+cout << "|O   O|" << endl;
+cout << "|O   O|" << endl;
+cout <<  "-----" << endl;
+}
+}
+};
+
+//int roll() {
+//  int num;
+//  num = rand() % (6) + 1;
+//  return num;
+//}
 char player1[100];
 char player2[100];
 
@@ -80,16 +152,21 @@ class Turns {
   Node<string>* tail;
   Node<string>* current;
   stack st1;
+  Dice d1;
 	bool x, y;
 	int p1,p2;
+	int m1;
+	int m2;
   Turns() {
     head = NULL;
     tail = NULL;
     current = NULL;
-     p1 = 0; //p for position
-     p2 = 0; //p for position
+    p1 = 0; //p for position
+    p2 = 0; //p for position
 	x=true;
 	y=false;
+	m1=0;
+	m2=0;
   }
   string getcurrent() {
     return current -> data;
@@ -99,6 +176,21 @@ class Turns {
   }
   void sethead(Node<string>* Head) {
     head = Head;
+  }
+  void result()
+  {
+    if (p1 == 100) {
+        cout << "Player 1 " <<getcurrent()<<" has Won!!!";
+        cout << "Player 1 Total Moves : " << m1;
+        cout << "Player 2 Total Moves : " << m2;
+        exit(0);
+      }
+      if (p2 == 100) {
+        cout << "Player 2 " <<getcurrent()<<" has Won!!!";
+        cout << "Player 1 Total Moves : " << m1;
+        cout << "Player 2 Total Moves : " << m2;
+        exit(0);
+      }
   }
   void add(string num) {
     Node<string>* temp = new Node<string>;
@@ -144,7 +236,6 @@ class Turns {
     char n; //cin from user for dice roll
     int r; //number from dice
     int c;
-
     //	int p2=0; 
     //		while(p1 != 100 || p2!= 100){
     player1[p1] = ' ';
@@ -160,7 +251,8 @@ class Turns {
       p2 = p2;
   }
       else {
-        r = roll();
+        r = d1.roll();
+        d1.display(r);
         if (x==true) {
         st1.push(r);
           p1 = p1 + st1.gettop(); //update the position by adding new number generated from dice
@@ -172,7 +264,7 @@ class Turns {
           }
           cout << "Player 1 "<<getcurrent()<<" got " << st1.gettop() << endl;
           if (r == 6) { //if dice give 6 then re-roll
-            r = roll();
+            r = d1.roll();
             st1.push(r);
             p1 = p1 + st1.gettop();
             if (p1 > 100) {
@@ -183,7 +275,7 @@ class Turns {
             }
             cout << "Player 1 "<<getcurrent()<<" got " << st1.gettop() << " at 2nd turn" << endl;
             if (r == 6) {
-            r = roll(); //roll for the third time
+            r = d1.roll(); //roll for the third time
             st1.push(r);
             p1 = p1 + st1.gettop();
               if (p1 > 100 && r != 6) {
@@ -217,7 +309,7 @@ class Turns {
           }
           cout << "Player 2 "<<getcurrent()<<" got " << r << endl;
           if (r == 6) { //if dice give 6 then re-roll
-            r = roll();
+            r = d1.roll();
             st1.push(r);
             p2 = p2 + st1.gettop();
             if (p2 > 100) {
@@ -227,7 +319,7 @@ class Turns {
             }
             cout << "Player 2 "<<getcurrent()<<" got " << r << " at 2nd turn" << endl;
             if (r == 6) {
-              r = roll(); //roll for the third time
+              r = d1.roll(); //roll for the third time
             st1.push(r);
               p2 = p2 + st1.gettop();
               if (p2 > 100 && r != 6) {
@@ -258,20 +350,14 @@ class Turns {
 	if (x == true && y==false) {
       y = true;
       x=false;
+      m1=m1+1;
     } else {
       x = true;
       y=false;
+        m2=m2+1;
     }
-      if (p1 == 100) {
-        cout << "Player 1 " <<getcurrent()<<" has Won!!!";
-        exit(0);
-      }
-      if (p2 == 100) {
-        cout << "Player 2 " <<getcurrent()<<" has Won!!!";
-        exit(0);
-      }
+    result();
   }
-
 };
 void board() {
   cout << " ______________________________________________________________________" << endl;
@@ -305,7 +391,6 @@ void board() {
   cout << "|  " << "1    " << "|  " << "2   " << "|  " << "3   " << "|  " << "4   " << "|  " << "5   " << "|  " << "6   " << "|  " << "7   " << "|  " << "8   " << "|  " << "9   " << "|  " << "10  |" << endl;
   cout << "|" << "   " << player1[1] << player2[1] << "  |" << "   " << player1[2] << player2[2] << " |" << "   " << player1[3] << player2[3] << " |" << "   " << player1[4] << player2[4] << " |" << "   " << player1[5] << player2[5] << " |" << "   " << player1[6] << player2[6] << " |" << "   " << player1[7] << player2[7] << " |" << "   " << player1[8] << player2[8] << " |" << "   " << player1[9] << player2[9] << " |" << "   " << player1[10] << player2[10] << " |";
   cout << endl << " ----------------------------------------------------------------------" << endl;
-
 }
 int main() {
   Turns l1;
