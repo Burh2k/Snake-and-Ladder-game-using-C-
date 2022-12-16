@@ -201,6 +201,7 @@ class Turns {
         cout << "Player 1 Total Moves : " << m1<<endl;
         cout << "Player 2 Total Moves : " << m2<<endl;
       }
+      	PlaySound(TEXT("end"),NULL, SND_FILENAME);
         Sleep(1000);
     	while (counter >= 1)
     	{
@@ -264,6 +265,10 @@ class Turns {
     cin >> n;
     
     if (n == 'r') {
+    if (p1 == 100 || p2 == 100)
+	  {
+		result();
+  	}
       if (p1 > 100 || p2 > 100)
 	  { //if dice generate a number that led to cross the 100th box in grid
         p1 = p1; //keep the present position
@@ -365,7 +370,6 @@ class Turns {
               	st1.pop();
 			  	p2=p2- st1.gettop();
               	st1.pop();
-				//p2 = 6 - 6 - 6;
                 cout << "Three consecutive 6's which is 0" << endl;
               } else
                 cout << "Player 2 "<<getcurrent()<<" got " << r << " at 3rd turn" << endl;
@@ -390,8 +394,7 @@ class Turns {
       y=false;
         m2=m2+1;
     }
-   // result();
-  }
+  }   
 }
 };
 void board() {
@@ -435,6 +438,7 @@ int main() {
   	string user;
   	char x;  //input to continue the loop
 	int col=189;
+	int count=9;
 	HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
   	SetConsoleTextAttribute(hCon, 189);
  if(col==189){
@@ -455,7 +459,12 @@ int main() {
   	cin >> user;
   	l1.add(user);
   	l1.display();
-  	Sleep(5000);
+  	while (count >= 1)
+    {
+        	cout << "\rGET READY!!! Game will Start in " << count << flush;
+        	Sleep(1000);
+        	count--;
+   	}
   }
 while (true) {
 	system("CLS");
