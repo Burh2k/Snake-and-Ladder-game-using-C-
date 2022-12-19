@@ -151,7 +151,7 @@ cout <<  "-----" << endl;
 	PlaySound(TEXT("dice"),NULL, SND_FILENAME);
 }
 };
-  	int p1,p2;
+  	
 class Turns {
   public: 
   Node<string>* head;
@@ -159,10 +159,13 @@ class Turns {
   Node<string>* current;
   stack st1;
   Dice d1;
-	bool x, y;
-	int m1;
-	int m2;
-	bool check1,check2;
+  bool x, y;
+  int c1,c2;
+  int m1;
+  int m2;
+  int p1,p2;
+  bool check1,check2;
+  int previous_state;
   Turns() {
     head = NULL;
     tail = NULL;
@@ -172,7 +175,10 @@ class Turns {
 	p1 = 0; //p for position
     p2 = 0; //p for position
 	m1=0;
+	previous_state=0;
 	m2=0;
+	c1=0;
+	c2=0;
 	check1=false;
 	check2=false;
   }
@@ -185,10 +191,10 @@ class Turns {
 	int getp2(){
   	return p2;
 }
-	void setp1(int &newp1){ //if  & not used then copy is recieved
+	void setp1(int newp1){ //if  & not used then copy is recieved
   	p1=newp1;
   }
-	void setp2(int &newp2){
+	void setp2(int newp2){
   	p2=newp2;
 }
   void setcurrent(Node<string>* index) {
@@ -237,7 +243,6 @@ class Turns {
   }
   void display() {
     setcurrent(head);
-
     while (current != NULL) {
       cout << "-> " << getcurrent() << endl;
       setcurrent(current -> next);
@@ -280,13 +285,16 @@ class Turns {
       p2 = p2;
   }
       else {
+     	//do_it:
         r = d1.roll();
         d1.display(r);
-        if(x==true && r==6){
+        if(x==true && r==6 && c1==0){
         check1=true;
+     	c1++; //increment 1 so that this event will not occure again.. only once
 		}
-		else if(y==true && r==6){
+		else if(y==true && r==6 && c2==0){
         check2=true;
+     	c2++;
 		}
 		else{
 			cout<<"You did not get 6"<<endl;
@@ -294,7 +302,12 @@ class Turns {
 		if(check1){
         if (x==true) {
 		m1=m1+1;
-        st1.push(r);
+		if(c1!=1){
+       		st1.push(r);
+		}else{
+			st1.push(0);
+			c1++;
+		}
           p1 = p1 + st1.gettop(); //update the position by adding new number generated from dice
           if (p1 > 100) {
             p1=p1- st1.gettop();
@@ -304,7 +317,8 @@ class Turns {
           }
           cout << "Player 1 "<<getcurrent()<<" got " << st1.gettop() << endl;
           if (r == 6) { //if dice give 6 then re-roll
-            r = d1.roll();
+
+			r = d1.roll();
             st1.push(r);
             p1 = p1 + st1.gettop();
             if (p1 > 100) {
@@ -343,7 +357,12 @@ class Turns {
 		if(check2){
 		 if (y==true){
 		 m2=m2+1;
-		 st1.push(r);
+		if(c2!=1){
+       		st1.push(r);
+		}else{
+			st1.push(0);
+			c2++;
+		}
           p2 = p2 + st1.gettop(); //update the position by adding new number generated from dice
           if (p2 > 100) {
           	p2=p2- st1.gettop();
@@ -352,7 +371,7 @@ class Turns {
           }
           cout << "Player 2 "<<getcurrent()<<" got " << r << endl;
           if (r == 6) { //if dice give 6 then re-roll
-            r = d1.roll();
+			r = d1.roll();
             st1.push(r);
             p2 = p2 + st1.gettop();
             if (p2 > 100) {
@@ -404,6 +423,83 @@ class Turns {
   	cout<<"--INVALID INPUT--"<<endl;
   	goto again;
   }   
+}
+
+void Shortcut(){
+	//------Snake-----
+	if(p1 == 22){
+		previous_state = p1;
+	//	index1=player.getp1()-19;
+	//	p1=player.getp1()-19;
+		p1=p1-19;
+		cout << getcurrent()<<" got onto Snake!! at "<< previous_state << " you are moved to place " << p1 << endl;
+		PlaySound(TEXT("snake"),NULL, SND_FILENAME);
+	}
+	else if(p1 == 88){
+		previous_state = p1;
+	//	index1=player.getp1()-53;
+		p1=p1-53;
+	//	player.setp1(player.getp1()-53);
+		cout << getcurrent()<<" got onto Snake!! at "<< previous_state << " you are moved to place " << p1 << endl;
+		PlaySound(TEXT("snake"),NULL, SND_FILENAME);
+	}
+	if(p2 == 22){
+		previous_state = p2;
+		//index2= player.getp2()-19;
+		p2=p2-19;
+	//	player.setp2(player.getp2()-19);
+		cout << getcurrent()<<" got onto Snake!! at "<< previous_state << " you are moved to place " <<p2 << endl;
+		PlaySound(TEXT("snake"),NULL, SND_FILENAME);
+	}
+	else if(p2 == 88){
+		previous_state = p2;
+	//	index2=player.getp2()-53;
+		p2=p2-53;
+	//	player.setp2(player.getp2()-53);
+		cout << getcurrent()<<" got onto Snake!! at "<< previous_state << " you are moved to place " << p2 << endl;
+	//	flag = 1;
+		PlaySound(TEXT("snake"),NULL, SND_FILENAME);
+	}
+	//------LADDER-----
+	if(p1 == 14){
+		previous_state = p1;
+	//	index1=player.getp1()+35;
+		p1=p1+35;
+	//	player.setp1(player.getp1()+35);
+		cout << getcurrent()<< " got into LADDER!! at " << previous_state << " you are moved to place " << p1<< endl;
+	//	flag = 1;
+		PlaySound(TEXT("ladder"),NULL, SND_FILENAME);
+	}
+	else if(p1 == 62){
+		previous_state = p1;
+	//	index1=player.getp1()+18;
+		p1=p1+18;
+	//	player.setp1(player.getp1()+18);
+		cout << getcurrent()<< " got into LADDER!! at " << previous_state << " you are moved to place " << p1<< endl;
+	//	flag = 1;
+		PlaySound(TEXT("ladder"),NULL, SND_FILENAME);
+	}
+	if(p2== 14){
+		previous_state = p2;
+	//	index2=player.getp2()+35;
+		p2=p2+35;
+	//	player.setp2(player.getp2()+35);
+		cout << getcurrent()<< " got into LADDER!! at " << previous_state << " you are moved to place " << p2<< endl;
+	//	flag = 1;
+		PlaySound(TEXT("ladder"),NULL, SND_FILENAME);
+	}
+	else if(p2 == 62){
+		previous_state = p2;
+	//	index2=player.getp2()+18;
+		p2=p2+18;
+	//	player.setp2(player.getp2()+18);
+		cout << getcurrent()<< " got into LADDER!! at " << previous_state << " you are moved to place " << p2<< endl;
+		PlaySound(TEXT("ladder"),NULL, SND_FILENAME);	
+	}
+		player1[p1] = 'A';
+    	player1[previous_state] = ' ';
+    	player2[p2] = 'B';
+		player2[previous_state] = ' ';
 }
 };
 void board() {
@@ -474,89 +570,6 @@ bool Track(Turns p1){
 		return true;
 	}
 }
-void Shortcut(Turns player){
-	flag=0;
-	//------Snake-----
-	if(p1 == s1){
-		previous_state = player.getp1();
-	//	index1=player.getp1()-19;
-		p1=p1-19;
-		player.setp1(p1);
-		cout << player.getcurrent()<<" got onto Snake!! at "<< previous_state << " you are moved to place " << player.getp1() << endl;
-		flag = 1;
-	//	PlaySound(TEXT("dice"),NULL, SND_FILENAME);
-	}
-	else if(p1 == s2){
-		previous_state = player.getp1();
-	//	index1=player.getp1()-53;
-		p1=p1-53;
-		player.setp1(p1);
-		cout << player.getcurrent()<<" got onto Snake!! at "<< previous_state << " you are moved to place " << player.getp1() << endl;
-		flag = 1;
-	//	PlaySound(TEXT("dice"),NULL, SND_FILENAME);
-	}
-	if(p2 == s1){
-		previous_state = player.getp2();
-		//index2= player.getp2()-19;
-		p2=p2-19;
-		player.setp2(p2);
-		cout << player.getcurrent()<<" got onto Snake!! at "<< previous_state << " you are moved to place " <<player.getp2() << endl;
-		flag = 1;
-	//	PlaySound(TEXT("dice"),NULL, SND_FILENAME);
-	}
-	else if(p2 == s2){
-		previous_state = player.getp2();
-	//	index2=player.getp2()-53;
-		p2=p2-53;
-		player.setp2(p2);
-		cout << player.getcurrent()<<" got onto Snake!! at "<< previous_state << " you are moved to place " << player.getp2() << endl;
-		flag = 1;
-	//	PlaySound(TEXT("dice"),NULL, SND_FILENAME);
-	}
-	//------LADDER-----
-	if(p1 == l1){
-		previous_state = player.getp1();
-	//	index1=player.getp1()+35;
-		p1=p1+35;
-		player.setp1(p1);
-		cout << player.getcurrent()<< " got into LADDER!! at " << previous_state << " you are moved to place " << player.getp1()<< endl;
-		flag = 1;
-	//	PlaySound(TEXT("dice"),NULL, SND_FILENAME);
-	}
-	else if(p1 == l2){
-		previous_state = player.getp1();
-	//	index1=player.getp1()+18;
-		p1=p1+18;
-		player.setp1(p1);
-		cout << player.getcurrent()<< " got into LADDER!! at " << previous_state << " you are moved to place " << player.getp1()<< endl;
-		flag = 1;
-	//	PlaySound(TEXT("dice"),NULL, SND_FILENAME);
-	}
-	if(p2== l1){
-		previous_state = player.getp2();
-	//	index2=player.getp2()+35;
-		p2=p2+35;
-		player.setp2(p2);
-		cout << player.getcurrent()<< " got into LADDER!! at " << previous_state << " you are moved to place " << player.getp2()<< endl;
-		flag = 1;
-	//	PlaySound(TEXT("dice"),NULL, SND_FILENAME);
-	}
-	else if(p2 == l2){
-		previous_state = player.getp2();
-	//	index2=player.getp2()+18;
-		p2=p2+18;
-		player.setp2(p2);
-		cout << player.getcurrent()<< " got into LADDER!! at " << previous_state << " you are moved to place " << player.getp2()<< endl;
-		flag = 1;
-	//	PlaySound(TEXT("dice"),NULL, SND_FILENAME);
-	}
-	if(flag == 1){
-    	player1[player.getp1()] = 'A';
-    	player1[previous_state] = ' ';
-    	player2[player.getp2()] = 'B';
-		player2[previous_state] = ' ';
-	}
-}
 };
 
 int main() {
@@ -568,8 +581,8 @@ int main() {
   	char x;  //input to continue the loop
 	int col=181;
 	int count=5;
-	HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
-  	SetConsoleTextAttribute(hCon, col);
+	HANDLE color = GetStdHandle(STD_OUTPUT_HANDLE);
+  	SetConsoleTextAttribute(color, col);
  if(col==181){
 	cout<<"\a\n\n\n"
   <<"\t******************************************************"<<endl
@@ -599,13 +612,13 @@ while (true) {
 	system("CLS");
     l1.move();
     if(ss.Track(l1)){
-    	ss.Shortcut(l1);
+    	l1.Shortcut();
 	}
     board();
     l1.forward();
     l1.move();
     if(ss.Track(l1)){
-   	ss.Shortcut(l1);
+   	l1.Shortcut();
 	}
     board();
     l1.backward();
