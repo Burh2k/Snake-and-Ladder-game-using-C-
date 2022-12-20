@@ -1,7 +1,5 @@
-// This code example is created for educational purpose
-// by Thorsten Thormaehlen (contact: www.thormae.de).
-// It is distributed without any warranty.
-
+//header file that provide you GUI envirnment
+//API file
 #include <GL/freeglut.h> // we use glut here as window manager
 
 #define _USE_MATH_DEFINES
@@ -239,10 +237,21 @@ break;
    }
 }
 
-int main(int argc, char **argv) 
+//argc is a pointer
+//argv is an array of strings, already pointer
+int main(int argc, char **argv) //these variables are used to intialize the glut library
 {
-  glutInit(&argc, argv);
+//glut library functions
+//everyfunction has prefix glut with them
+//every glut function is specified to perform specific function
+//main function arguments are passed to intialize the libary
+  glutInit(&argc, argv); //intialize the glut libaray
+  
+//intialize the glut display mode
+//multiple flags are passed as argument to the function
   glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
+//RBGA is the color mode for API to use
+
   glutInitWindowPosition(700,300);
   glutInitWindowSize(400, 400);
 
