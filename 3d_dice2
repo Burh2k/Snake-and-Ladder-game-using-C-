@@ -36,7 +36,11 @@ public:
   }
 
   void display() {
+  //clear the buffers like color buffer or frame buffer
+  //f is for float.. 0(minimum)-1(maximum for color)
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    //this cmd is to clear frame buffer
+    //spcify that what type of buffer you want to use
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glMatrixMode(GL_MODELVIEW);
@@ -253,9 +257,13 @@ int main(int argc, char **argv) //these variables are used to intialize the glut
 //RBGA is the color mode for API to use
 
   glutInitWindowPosition(700,300);
+  //if position not specified that screen will display randomly on the screen
   glutInitWindowSize(400, 400);
-
+//some default size will be used if not specified
   glutCreateWindow("Game Dice");
+  //this actually creates the window with some title..
+  
+  //this is a call_back function
   glutDisplayFunc(glutDisplay);
   glutIdleFunc(glutDisplay);
   glutReshapeFunc(glutResize);
@@ -265,8 +273,8 @@ int main(int argc, char **argv) //these variables are used to intialize the glut
 
   glutTimerFunc(unsigned(20), timer, 0);
   
-  
-  	
+  //order of commands matter here in GUI
+  //same as system('pause')
   glutMainLoop();
 
   return 0;
