@@ -103,7 +103,10 @@ private:
 
     glBindTexture(GL_TEXTURE_2D, texID);
     glColor3f(1.0f,0.0f,0.0f);
-    glBegin(GL_POLYGON); // three
+    //define the scope of dice face
+    //GL_POLYGON specify that i am going to make a polygon shape
+    glBegin(GL_POLYGON); // three 
+    //2d coodinates on xy plain
     glTexCoord2f(0.25f,0.50f); glVertex3f(-1.0f, 1.0f, 1.0f);
     glTexCoord2f(0.25f,0.25f); glVertex3f(-1.0f,-1.0f, 1.0f);
     glTexCoord2f(0.50f,0.25f); glVertex3f( 1.0f,-1.0f, 1.0f);
