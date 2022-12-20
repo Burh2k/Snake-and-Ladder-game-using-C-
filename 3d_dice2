@@ -29,21 +29,29 @@ public:
 		return t;
 	}
   void resize(int w, int h) {
+  //this specify the viewport as whole screen
+  //spcify x and y to display the content at any specific position
     glViewport(0, 0, w, h);
+    
+  //Perspective view
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective (30.0, (float)w/(float)h, 0.1, 50.0);
+    //left, right, bottom, top
   }
 
   void display() {
   //clear the buffers like color buffer or frame buffer
   //f is for float.. 0(minimum)-1(maximum for color)
+  //this color function gives the default color for background of console
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     //this cmd is to clear frame buffer
     //spcify that what type of buffer you want to use
+    //this clear the color buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glMatrixMode(GL_MODELVIEW);
+    //reset all transformations
     glLoadIdentity();
     // set camera
     gluLookAt(8.0, -2.0, 5.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
