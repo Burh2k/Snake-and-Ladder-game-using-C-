@@ -50,6 +50,7 @@ public:
     //this clear the color buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+//default view of the display mode
     glMatrixMode(GL_MODELVIEW);
     //reset all transformations
     glLoadIdentity();
