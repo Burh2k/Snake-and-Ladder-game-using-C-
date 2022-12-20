@@ -107,6 +107,7 @@ private:
     //GL_POLYGON specify that i am going to make a polygon shape
     glBegin(GL_POLYGON); // three 
     //2d coodinates on xy plain
+    //polygons have front and back side
     glTexCoord2f(0.25f,0.50f); glVertex3f(-1.0f, 1.0f, 1.0f);
     glTexCoord2f(0.25f,0.25f); glVertex3f(-1.0f,-1.0f, 1.0f);
     glTexCoord2f(0.50f,0.25f); glVertex3f( 1.0f,-1.0f, 1.0f);
