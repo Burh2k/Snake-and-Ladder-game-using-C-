@@ -101,6 +101,8 @@ private:
   void drawTexturedCube() {
     glEnable(GL_TEXTURE_2D);
 
+	//Specifies the target to which the texture is bound
+	//maa tum ko ek design de rha hoon jo texID maa hn aor wo GL_TEXTURE_2D type k ha
     glBindTexture(GL_TEXTURE_2D, texID);
     glColor3f(1.0f,0.0f,0.0f);
     //define the scope of dice face
