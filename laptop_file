@@ -6,14 +6,11 @@
 #include <mmsystem.h>
 #include<string>
 
-#include <GL/freeglut.h> // we use glut here as window manager
-
-#define _USE_MATH_DEFINES
 #include <math.h>
 
-#include <sstream>
-#include <fstream>
-#include <vector>
+//#include <sstream>
+//#include <fstream>
+//#include <vector>
 
 using namespace std;
 
