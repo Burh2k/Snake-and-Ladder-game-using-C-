@@ -2,14 +2,14 @@
 //API file
 #include <GL/freeglut.h> // we use glut here as window manager
 
-#define _USE_MATH_DEFINES
-#include <math.h>
+//#define _USE_MATH_DEFINES
+//#include <math.h>
 
 #include <iostream>
 #include <string>
-#include <sstream>
-#include <fstream>
-#include <vector>
+//#include <sstream>
+//#include <fstream>
+//#include <vector>
 using namespace std;
 
 class Renderer {
