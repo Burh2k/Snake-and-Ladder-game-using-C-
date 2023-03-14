@@ -18,3 +18,25 @@ move $a0,$s0
 li $v0,1 
 syscall 
 li $v0 ,10 
+#---------------------------------------------------------------------------------------------------------------------------------
+
+.text
+main:
+la $a0,prompt #load Address (address for string to be printed)
+li $v0,4 #v is return register
+syscall
+
+la $a0,input #provde area of 20 characters (address register)
+li $a1,20  #provde storage of 20 characters
+li $v0,8
+syscall
+
+la $a1,prompt2
+li $v0, 4
+syscall
+
+move $a0, $a1
+li $v0, 4
+syscall
+li $v0, 10
+syscall
